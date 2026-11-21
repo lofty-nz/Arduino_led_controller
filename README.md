@@ -1,45 +1,74 @@
-# LED Light Show - FastLED Demo
+# Arduino LED Controller
 
-This project showcases various animation patterns on an LED strip, using the FastLED library. The patterns are created using the different modes provided by FastLED. You can manually rotate between modes or use automatic mode. The brightness of the LEDs can also be controlled. The voltage level of the battery is monitored, with a warning message if it drops below a certain threshold.
+**Six FastLED patterns on a 70-LED strip, with a brightness knob and two buttons.**
 
-## Requirements
-- Arduino Board
-- LED Strip (WS2812B Type, GRB Color Order, 70 LEDs)
-- Potentiometer connected to pin A5 \(for brightness control\)
-- Green button connected to pin 5 \(for mode switch\)
-- Blue button connected to pin 4 \(for setting a fixed pattern\)
-- Battery connected to pin A0 \(for battery level monitoring\)
+![Arduino LED Controller: the six FastLED patterns](docs/arduino-led-controller-hero.jpg)
+
+An LED light show for an Arduino and a WS2812B strip, built on FastLED's "DemoReel100" example by Mark Kriegsman. A 2023 hobby project.
+
+- **Six patterns:** rainbow, rainbow with glitter, confetti, sinelon, juggle and BPM.
+- **Automatic mode** (the default) moves to the next pattern every 10 seconds.
+- **Brightness knob:** a potentiometer sets the brightness from 10 to 180 (out of 255).
+- **Green button:** manual mode and the next pattern.
+- **Blue button:** the whole strip white for 8 seconds.
+- **Both buttons together:** back to automatic mode (the strip flashes green for 1 second).
+
+## Hardware
+
+- A 5 V Arduino board with A0 and A5 (the code assumes a 5 V reference)
+- WS2812B LED strip, GRB colour order, 70 LEDs
+- Potentiometer for brightness
+- Two push buttons (green and blue)
+
+### Wiring (from the code)
+
+| Arduino pin | Goes to |
+|---|---|
+| D2 | LED strip data in |
+| A5 | Potentiometer wiper (ends to 5 V and GND) |
+| D5 | Green button, other side to GND (internal pull-up) |
+| D4 | Blue button, other side to GND (internal pull-up) |
+| A0 | Battery voltage (read, not used yet; see below) |
+| GND | Strip GND, buttons, potentiometer |
 
 ## Setup
-1. Connect your Arduino to your computer.
-2. Open the Arduino IDE, click on `File -> Open` and navigate to the `.ino` file.
-3. Click on `Tools -> Board` and select your Arduino board.
-4. Click on `Tools -> Port` and select the correct port for your Arduino board.
-5. Click on the upload button to upload the code to your Arduino.
+
+1. Install the **FastLED** library (Arduino IDE: Tools → Manage Libraries).
+2. Open `led_controller_sketch.ino` (File → Open).
+3. Tools → Board: pick your Arduino board.
+4. Tools → Port: pick its port.
+5. Click Upload.
+6. Optional: open the Serial Monitor at **9600** to see the knob reading, brightness, buttons and auto mode.
+
+The sketch waits 3 seconds at start-up before it lights the strip.
 
 ## Operation
-- Turn the potentiometer to control the brightness of the LEDs.
-- Press the green button to switch between different modes.
-- Press the blue button to set a fixed pattern on the LED strip.
-- When both buttons are pressed simultaneously, the system goes into automatic mode where it cycles through all patterns automatically.
-- In automatic mode, it changes patterns every 10 seconds.
-- In manual mode, press the green button to switch to the next pattern.
 
-## Included LED Patterns
+- Turn the potentiometer to set the brightness.
+- Press the **green** button to switch to manual mode and move to the next pattern. It moves on every time round the loop while the button is down, so a long press can skip more than one pattern.
+- Press the **blue** button to light the whole strip white for 8 seconds. Nothing else responds during that time.
+- Press **both** buttons together to go back to automatic mode. The strip flashes green for 1 second.
+- In automatic mode the pattern changes every 10 seconds.
+
+## Included LED patterns
+
 1. Rainbow
 2. Rainbow with Glitter
 3. Confetti
 4. Sinelon
 5. Juggle
-6. BPM \(Beats per minute\)
+6. BPM (Beats per minute)
 
-## Battery Level Monitoring
-- The system continuously monitors the battery level connected to pin A0. 
-- The low voltage threshold is set to 3.85 volts. 
-- If the voltage drops below this level, the Arduino will display a warning message.
+The banner above shows one simulated moment of each pattern, worked out from the sketch's FastLED code.
 
-## Contributors
-- [Your Name]\(Your Github Profile Link\)
+## Battery level monitoring (planned)
+
+The sketch reads a battery voltage on A0 and sets up a 3.85 V low-voltage threshold and a 10-reading average, but it doesn't use them yet: there is no voltage reading or low-battery warning so far.
+
+## Credits
+
+The patterns come from FastLED's DemoReel100 example by Mark Kriegsman (December 2014).
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE]\(LICENSE\) file for details.
+
+MIT License.
